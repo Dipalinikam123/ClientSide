@@ -1,15 +1,15 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import { Button } from 'reactstrap';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 import BufferTeam from './ui/pages/BufferTeam';
-import BufferSelectedTeam from './ui/pages/BufferConfigureTeam';
 import AddTeam from './ui/model/AddTeam';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import SideBar from './ui/model/SideBar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './ui/pages/Home';
 import BufferConfigureTeam from './ui/pages/BufferConfigureTeam';
+import AlertModel from './ui/model/AlertModel';
 
 function App() {
   const [modal, setModal] = useState(false);
@@ -23,9 +23,20 @@ function App() {
   const [buttonFlag, setButtonFlag] = useState(false)
   const [index, setIndex] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [deSearchTerm, setDeSearchTerm] = useState('')
   const [selectedTeams, setSelectedTeams] = useState([]);
   const [selectedTeamsArr, setSelectedTeamsArr] = useState([]);
+  const [deSelectedTeamsArr, setDeSelectedTeamsArr] = useState([]);
+  const [selectedTeamsArr2, setSelectedTeamsArr2] = useState([]);
+  const [configureTeam, setConfigureTeam] = useState([])
+  const [bufferModal, setBufferModal] = useState(false);
+  const bufferToggle = () => setBufferModal(!bufferModal);
 
+  const [alertModal, setAlertModal] = useState(false);
+  const alertToggle = () => setAlertModal(!alertModal);
+  const [removeTeamId, setRemoveTeamId] = useState(null);
+  const [teamFLag,setTeamFlag]=useState(false)
+  const [newTeam,setNewTeam]=useState({})
 
   console.log('---searchTerm', searchTerm)
   useEffect(() => {
@@ -38,6 +49,21 @@ function App() {
       setTeam(searchResults);
     }
   }, [searchTerm])
+
+  console.log("------selectedTeamsArr2", selectedTeamsArr2)
+  console.log("------deSearchTerm", deSearchTerm)
+  useEffect(() => {
+    const searchResults = selectedTeamsArr2?.filter((e) =>
+      e.teamName.toLowerCase().includes(deSearchTerm.toLowerCase())
+    );
+    if (deSearchTerm === '') {
+      setSelectedTeamsArr(selectedTeamsArr2)
+    } else {
+      setSelectedTeamsArr(searchResults);
+    }
+  }, [deSearchTerm])
+
+
 
   async function getTeamHandler() {
     try {
@@ -64,7 +90,7 @@ function App() {
     try {
       const response = await axios.post('http://localhost:1337/addTeam', createTeams, {
         headers: {
-          'Content-Type': 'multipart/form-data', // Use multipart/form-data for file uploads
+          'Content-Type': 'multipart/form-data',
         },
       });
       console.log('Response:', response.data);
@@ -73,9 +99,14 @@ function App() {
         teamName: '',
         teamImage: null
       });
-
+      setNewTeam(response.data.result)
+      toast('Create Team Succesfully', {
+        autoClose: 1000,
+      });
     } catch (error) {
-      alert(error?.response?.data?.message)
+      toast(error?.response?.data?.message, {
+        autoClose: 1000,
+      })
       console.error('Error uploading team:', error);
     }
   };
@@ -94,6 +125,7 @@ function App() {
     })
     toggle()
     setButtonFlag(false)
+    // setTeam[]
   }
   const handleUpdate = async () => {
     try {
@@ -108,30 +140,43 @@ function App() {
         teamName: '',
         teamImage: null
       });
+      toast('Team Update Successfully', {
+        autoClose: 1000,
+      })
       setIndex(null)
     } catch (error) {
-      console.error('Error updating team:', error);
+      toast(error?.response?.data?.message, {
+        autoClose: 1000,
+      })
     }
   }
   const handleRemove = async (id) => {
-    const isConfirmed = window.confirm('Are you sure you want to remove this team?');
-
-    if (isConfirmed) {
-      try {
-        const response = await axios.delete(`http://localhost:1337/removeTeam/${id}`, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log('Response remove:', response.data);
-        alert('Team removed successfully.');
-        getTeamHandler();
-      } catch (error) {
-        console.error('Error removing team:', error);
-        alert('Failed to remove team. Please try again.');
-      }
-    }
+    setRemoveTeamId(id)
+    alertToggle()
   };
+
+  const handleRemoveTeam = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:1337/removeTeam/${removeTeamId}`, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Response remove:', response.data);
+      toast('Team removed successfully.', {
+        autoClose: 1000,
+      });
+      alertToggle()
+      getTeamHandler();
+    } catch (error) {
+      console.error('Error removing team:', error);
+      toast('Failed to remove team. Please try again.', {
+        autoClose: 1000,
+      });
+    }
+
+  }
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value)
   };
@@ -147,6 +192,7 @@ function App() {
   console.log('------selectedTeams', selectedTeams)
 
   const selectedTeamHandler = () => {
+    setTeamFlag(true)
     console.log('-------team', team)
     console.log('-------selectedTeams', selectedTeams)
     const selected = [];
@@ -161,12 +207,15 @@ function App() {
     })
 
     setTeam(notSelected)
+    // setDeSelectedTeamsArr(notSelected)
     setSelectedTeamsArr([...selectedTeamsArr, ...selected])
+    setSelectedTeamsArr2([...selectedTeamsArr, ...selected])
     setSelectedTeams([])
 
   }
 
-  console.log('-------team after selection', team)
+  console.log('******-------deSelectedTeamsArr', deSelectedTeamsArr)
+  console.log('******-------deSelectedTeamsArr', deSelectedTeamsArr)
   console.log('-------selectedTeamsArr after selection', selectedTeamsArr)
 
   const restoreHandler = (index) => {
@@ -180,9 +229,11 @@ function App() {
       }
     });
     setSelectedTeamsArr(notSelected);
+    // setSelectedTeamsArr2(notSelected);
     setTeam([...selected, ...team]);
   }
   const addOneTeamHandler = (index) => {
+    setTeamFlag(true)
     const selected = [];
     const notSelected = [];
     team?.filter((e, i) => {
@@ -193,40 +244,71 @@ function App() {
       }
     });
     setTeam(notSelected);
+    // setDeSelectedTeamsArr(notSelected)
     setSelectedTeamsArr([...selectedTeamsArr, ...selected]);
+    setSelectedTeamsArr2([...selectedTeamsArr, ...selected]);
+
   }
   console.log('---setSelectedTeamsArr 11--', selectedTeamsArr)
 
+  const configureTeamHandler = async () => {
+    const challengeName = prompt('Enter Challenge Name..');
 
- 
+    if (challengeName) {
+      const payload = {
+        challengeName,
+        teams: selectedTeamsArr
+      };
+      try {
+        const response = await axios.post('http://localhost:1337/configureBufferTeam', payload, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log('Response:', response.data);
+        bufferToggle();
+        setSelectedTeamsArr([])
+        setTeamFlag(false)
+        getTeamHandler()
+        toast('Buffer Team Create successfully.', {
+          autoClose: 1000,
+        });
+
+      } catch (error) {
+        toast(error?.response?.data?.message, {
+          autoClose: 1000,
+        })
+        console.error('Error uploading team:', error);
+      }
+    };
+  }
+
+  async function getConfigTeamHandler() {
+    try {
+      const response = await axios.get('http://localhost:1337/getConfigureBufferTeam');
+      console.log('Response:', response.data);
+      setConfigureTeam(response.data.teams);
+
+    } catch (error) {
+      console.error('Error fetching team:', error);
+    }
+  }
+console.log('-----teamFLag',teamFLag)
   return (
-    <div >
+    <div>
 
       <BrowserRouter >
-        <div className='d-flex align-items-start'>
+        <div className='d-flex align-items-start' >
           <SideBar />
           <Routes>
-            <Route path='/' element={<BufferConfigureTeam team={team} editTeam={editTeamHandler} handleRemove={handleRemove} getTeamHandler={getTeamHandler} modalHandler={modalHandler} modal={modal} handleSearch={handleSearch} searchTerm={searchTerm} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler}  />} />
-            <Route path='/master-buffer-team' element={<BufferTeam modal={modal} team={team} getTeam={getTeamHandler} editTeam={editTeamHandler} handleRemove={handleRemove} selectedTeams={selectedTeams} handleSearch={handleSearch} searchTerm={searchTerm} modalHandler={modalHandler} />} />
+            <Route path='/configuration-buffer-team' element={<BufferConfigureTeam team={team} editTeam={editTeamHandler} handleRemove={handleRemove} getTeamHandler={getTeamHandler} modalHandler={modalHandler} modal={modal} handleSearch={handleSearch} searchTerm={searchTerm} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler} setSelectedTeamsArr={setSelectedTeamsArr} configureTeamHandler={configureTeamHandler} getConfigTeamHandler={getConfigTeamHandler} configureTeam={configureTeam} bufferToggle={bufferToggle} bufferModal={bufferModal} deSearchTerm={deSearchTerm} setDeSearchTerm={setDeSearchTerm} deSelectedTeamsArr={deSelectedTeamsArr} teamFLag={teamFLag} setSearchTerm={setSearchTerm}  setTeamFlag={setTeamFlag}/>} />
+            <Route path='/' element={<BufferTeam modal={modal} team={team} getTeam={getTeamHandler} editTeam={editTeamHandler} handleRemove={handleRemove} selectedTeams={selectedTeams} handleSearch={handleSearch} searchTerm={searchTerm} modalHandler={modalHandler} />} />
           </Routes>
         </div>
       </BrowserRouter>
-
-
-      {/* <div className='d-flex justify-content-between'>
-       
-        <Button onClick={selectedTeamHandler}>Add Team</Button>
-       
-      </div>
-      <div className="d-flex justify-content-center align-items-center gap-4 mt-5 w-full">
-      <div className='w-75'>
-        <BufferTeam modal={modal} team={team} getTeam={getTeamHandler} editTeam={editTeamHandler} handleRemove={handleRemove} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} />
-      </div>
-        <div className='w-50'>
-          <BufferConfigureTeam />
-        </div>
-        </div> */}
+      <AlertModel alertToggle={alertToggle} alertModal={alertModal} handleRemoveTeam={handleRemoveTeam} />
       <AddTeam modal={modal} toggle={toggle} createTeams={createTeams} handleNameChange={handleNameChange} handleImageChange={handleImageChange} handleSubmit={handleSubmit} buttonFlag={buttonFlag} handleUpdate={handleUpdate} />
+      <ToastContainer />
     </div>
   );
 }

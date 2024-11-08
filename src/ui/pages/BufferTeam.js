@@ -10,7 +10,7 @@ export default function BufferTeam({ getTeam, modal, team, editTeam, handleRemov
   }, [modal]);
 
   return (
-    <div className='d-flex flex-column px-5' style={{width:'85%'}} >
+    <div className='d-flex flex-column px-5' style={{width:'85%',maxHeight: '100vh', overflowY: 'auto'}}>
       <div className='d-flex justify-content-between py-3 px-2'>
         <Button onClick={()=>modalHandler()} className='bg-success'>Create Team</Button>
         <input

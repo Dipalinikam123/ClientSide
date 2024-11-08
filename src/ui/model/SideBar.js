@@ -15,11 +15,10 @@ export default function SideBar() {
       <hr />
 
       <nav className='d-flex flex-column gap-3 mt-5'>
-        <NavLink active to="/" className='text-light text-decoration-none border border-top-0 border-start-0 border-end-0 pb-2'>
+        <NavLink active to="/configuration-buffer-team" className='text-light text-decoration-none border border-top-0 border-start-0 border-end-0 pb-2'>
           Configure Buffer Team
         </NavLink>
-
-        <NavLink to="/master-buffer-team" className='text-light text-decoration-none border border-top-0 border-start-0 border-end-0 pb-2' >
+        <NavLink to="/" className='text-light text-decoration-none border border-top-0 border-start-0 border-end-0 pb-2' >
           Master Buffer Team
         </NavLink>
 
