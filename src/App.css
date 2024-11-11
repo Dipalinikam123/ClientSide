@@ -1,0 +1,14 @@
+
+.App-header {
+  background-color:  white;
+  min-height: 100vh;
+  /* color: white; */
+}
+.offcanvas.offcanvas-start {
+  width: 15% !important;
+  background-color: #282c34;
+  color: white;
+}
+.offcanvas-backdrop.show {
+  opacity: 0;
+}

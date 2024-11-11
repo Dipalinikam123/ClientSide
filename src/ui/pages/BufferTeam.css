@@ -1,0 +1,25 @@
+.table-dark th,
+.table-dark td {
+  color: #ffffff; 
+}
+
+.table-dark {
+  background-color: #343a40;
+}
+
+img {
+  border-radius: 5px; 
+  border: 1px solid #ddd;
+}
+
+td {
+  vertical-align: middle; 
+}
+
+button {
+  transition: background-color 0.3s; 
+}
+
+button:hover {
+  background-color: #0056b3;
+}
