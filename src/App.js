@@ -14,6 +14,7 @@ import NavBar from "./ui/components/NavBar";
 import Home from "./ui/pages/Home";
 import Unauthorized from "./ui/Unauthorized";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import Profile from "./ui/pages/Profile";
 
 
 const formFields = {
@@ -29,7 +30,7 @@ function App() {
   const toggle = () => setModal(!modal);
   const [team, setTeam] = useState([]);
   const [masterTeam, setMasterTeam] = useState([]);
-  const [filteredTeam, setFilteredTeam] = useState([]);
+  // const [filteredTeam, setFilteredTeam] = useState([]);
   const [createTeams, setCreateTeams] = useState({
     teamName: "",
     teamImage: null,
@@ -51,7 +52,7 @@ function App() {
   const [removeTeamId, setRemoveTeamId] = useState(null);
   const [teamFLag, setTeamFlag] = useState(false);
   const [getTeamFlag, setGetTeamFlag] = useState(false);
-
+  const [userProfile, setUserProfile] = useState({});
 
   const [logModal, setLogModal] = useState(false);
   const logToggle = () => setLogModal(!logModal);
@@ -80,23 +81,15 @@ function App() {
 
     setErrors({ nameError, emailError, passwordError });
   };
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const logValidateForm = () => {
+    setEmailError(!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(loginForm?.email));
+    setPasswordError(loginForm?.password?.length < 6);
+  };
 
-  // console.log("---searchTerm", searchTerm);
-  useEffect(() => {
-    const searchResults = filteredTeam.filter((e) =>
-      e.teamName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    if (searchTerm === "") {
-      setTeam(filteredTeam);
-      setMasterTeam(filteredTeam)
-    } else {
-      setTeam(searchResults);
-      setMasterTeam(searchResults)
-    }
-  }, [searchTerm]);
-
-  // console.log("------selectedTeamsArr2", selectedTeamsArr2);
-  // console.log("------deSearchTerm", deSearchTerm);
+  const deSelectedTeamsArr = team.filter((e) => e.teamName.toLowerCase().includes(searchTerm.toLowerCase()))
+  const masterBufferTeamsArr = masterTeam.filter((e) => e.teamName.toLowerCase().includes(searchTerm.toLowerCase()))
   useEffect(() => {
     const searchResults = selectedTeamsArr2?.filter((e) =>
       e.teamName.toLowerCase().includes(deSearchTerm.toLowerCase())
@@ -118,7 +111,6 @@ function App() {
       );
 
       setTeam(deselectedTeams);
-      setFilteredTeam(deselectedTeams);
     } catch (error) {
       console.error("Error fetching team:", error);
     }
@@ -127,7 +119,7 @@ function App() {
     try {
       const response = await axios.get("http://localhost:1337/getTeam");
       setMasterTeam(response.data.team);
-      setFilteredTeam(response.data.team);
+      // setFilteredTeam(response.data.team);
     } catch (error) {
       console.error("Error fetching team:", error);
     }
@@ -274,7 +266,6 @@ function App() {
     });
 
     setTeam(notSelected);
-    // setDeSelectedTeamsArr(notSelected)
     setSelectedTeamsArr([...selectedTeamsArr, ...selected]);
     setSelectedTeamsArr2([...selectedTeamsArr, ...selected]);
     setSelectedTeams([]);
@@ -295,7 +286,6 @@ function App() {
       }
     });
     setSelectedTeamsArr(notSelected);
-    // setSelectedTeamsArr2(notSelected);
     setTeam([...selected, ...team]);
   };
   const addOneTeamHandler = (index) => {
@@ -310,7 +300,6 @@ function App() {
       }
     });
     setTeam(notSelected);
-    // setDeSelectedTeamsArr(notSelected)
     setSelectedTeamsArr([...selectedTeamsArr, ...selected]);
     setSelectedTeamsArr2([...selectedTeamsArr, ...selected]);
   };
@@ -351,6 +340,21 @@ function App() {
     }
   };
 
+  async function getUserProfile() {
+    try {
+      const token =JSON.parse(localStorage.getItem("token")); 
+      const response = await axios.get(`http://localhost:1337/userProfile`, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+      console.log("Response:", response.data);
+      setUserProfile(response.data);
+    } catch (error) {
+      console.error("Error fetching team:", error);
+    }
+
+  }
   async function getConfigTeamHandler() {
     try {
       const response = await axios.get(
@@ -386,12 +390,16 @@ function App() {
     }
   }
   async function loginUserHandler() {
+    setPasswordError(false)
+    setEmailError(false)
+
+    logValidateForm()
     try {
       const response = await axios.post(
         "http://localhost:1337/userSignup",
         loginForm,
       );
-      console.log("Response:", response.data);
+      console.log("Response login:", response.data);
       logToggle();
       setLoginForm({
         email: '',
@@ -413,7 +421,7 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <NavBar logModal={logModal} logToggle={logToggle} regModal={regModal} regToggle={regToggle} setRegisterForm={setRegisterForm} registerForm={registerForm} loginForm={loginForm} setLoginForm={setLoginForm} token={token} setToken={setToken} registerUserHandler={registerUserHandler} loginUserHandler={loginUserHandler} errors={errors} setErrors={setErrors}/>
+        <NavBar logModal={logModal} logToggle={logToggle} regModal={regModal} regToggle={regToggle} setRegisterForm={setRegisterForm} registerForm={registerForm} loginForm={loginForm} setLoginForm={setLoginForm} token={token} setToken={setToken} registerUserHandler={registerUserHandler} loginUserHandler={loginUserHandler} errors={errors} setErrors={setErrors} setPasswordError={setPasswordError} setEmailError={setEmailError} passwordError={passwordError} emailError={emailError} />
         <div className="d-flex align-items-start">
 
           {token ? <SideBar /> : <Routes><Route path="/" element={<Home />} /></Routes>}
@@ -422,51 +430,23 @@ function App() {
             <Route
               path="/configuration-buffer-team"
               element={<ProtectedRoute componant={<BufferConfigureTeam
-                team={team}
-                editTeam={editTeamHandler}
-                handleRemove={handleRemove}
-                getTeamHandler={getTeamHandler}
-                modalHandler={modalHandler}
-                modal={modal}
-                handleSearch={handleSearch}
-                searchTerm={searchTerm}
-                handleCheckboxChange={handleCheckboxChange}
-                selectedTeams={selectedTeams}
-                selectedTeamHandler={selectedTeamHandler}
-                selectedTeamsArr={selectedTeamsArr}
-                restoreHandler={restoreHandler}
-                addOneTeamHandler={addOneTeamHandler}
-                setSelectedTeamsArr={setSelectedTeamsArr}
-                configureTeamHandler={configureTeamHandler}
-                getConfigTeamHandler={getConfigTeamHandler}
-                configureTeam={configureTeam}
-                bufferToggle={bufferToggle}
-                bufferModal={bufferModal}
-                deSearchTerm={deSearchTerm}
-                setDeSearchTerm={setDeSearchTerm}
-                // deSelectedTeamsArr={deSelectedTeamsArr}
-                teamFLag={teamFLag}
-                setSearchTerm={setSearchTerm}
-                setTeamFlag={setTeamFlag}
-                getTeamFlag={getTeamFlag}
+                team={team} editTeam={editTeamHandler} handleRemove={handleRemove} getTeamHandler={getTeamHandler} modalHandler={modalHandler} modal={modal} handleSearch={handleSearch} searchTerm={searchTerm}
+                handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler}
+                setSelectedTeamsArr={setSelectedTeamsArr} configureTeamHandler={configureTeamHandler} getConfigTeamHandler={getConfigTeamHandler} configureTeam={configureTeam} bufferToggle={bufferToggle} bufferModal={bufferModal} deSearchTerm={deSearchTerm}
+                setDeSearchTerm={setDeSearchTerm} teamFLag={teamFLag} setSearchTerm={setSearchTerm} setTeamFlag={setTeamFlag} getTeamFlag={getTeamFlag} deSelectedTeamsArr={deSelectedTeamsArr}
+
               />} />
               }
             />
             <Route
               path="/master-buffer-team"
               element={<ProtectedRoute componant={<BufferTeam
-                modal={modal}
-                masterTeam={masterTeam}
-                getTeam={getMasterBufferTeamHandler}
-                editTeam={editTeamHandler}
-                handleRemove={handleRemove}
-                selectedTeams={selectedTeams}
-                handleSearch={handleSearch}
-                searchTerm={searchTerm}
-                modalHandler={modalHandler}
+                modal={modal} masterTeam={masterTeam} getTeam={getMasterBufferTeamHandler} editTeam={editTeamHandler} handleRemove={handleRemove} selectedTeams={selectedTeams}
+                handleSearch={handleSearch} searchTerm={searchTerm} modalHandler={modalHandler} masterBufferTeamsArr={masterBufferTeamsArr}
               />} />
               }
             />
+            <Route path="/profile" element={<ProtectedRoute componant={<Profile getUserProfile={getUserProfile} userProfile={userProfile} />} />} />
             <Route path='/unauthorized' element={<Unauthorized logModal={logModal} regModal={regModal} />} />
           </Routes>
         </div>

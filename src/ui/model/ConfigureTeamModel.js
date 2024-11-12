@@ -4,7 +4,7 @@ import SelectedBufferTeam from '../pages/SelectedBufferTeam';
 import DeselectedBufferTeam from '../pages/DeselectedBufferTeam';
 
 
-export default function ConfigureTeamModel({ modals, toggle, team, handleRemove, getTeamHandler, modalHandler, modal, searchTerm, handleSearch, handleCheckboxChange, selectedTeams, selectedTeamHandler, selectedTeamsArr, restoreHandler, addOneTeamHandler, configureTeamHandler, deSearchTerm, setDeSearchTerm, teamFLag, getTeamFlag }) {
+export default function ConfigureTeamModel({ modals, toggle,  handleRemove, getTeamHandler, modalHandler, searchTerm, handleSearch, handleCheckboxChange, selectedTeams, selectedTeamHandler, selectedTeamsArr, restoreHandler, addOneTeamHandler, configureTeamHandler, deSearchTerm, setDeSearchTerm, teamFLag, getTeamFlag,deSelectedTeamsArr }) {
   return (
     <div className=''>
       <Modal isOpen={modals} toggle={toggle} size='xl' >
@@ -12,10 +12,10 @@ export default function ConfigureTeamModel({ modals, toggle, team, handleRemove,
         <ModalBody>
           <div className='d-flex w-100'>
             <div className='w-50 border'>
-              <DeselectedBufferTeam modal={modal} team={team} handleRemove={handleRemove} getTeam={getTeamHandler} modalHandler={modalHandler} searchTerm={searchTerm} handleSearch={handleSearch} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} addOneTeamHandler={addOneTeamHandler} selectedTeamsArr={selectedTeamsArr} teamFLag={teamFLag} getTeamFlag={getTeamFlag} />
+              <DeselectedBufferTeam handleRemove={handleRemove} getTeam={getTeamHandler} modalHandler={modalHandler} searchTerm={searchTerm} handleSearch={handleSearch} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} addOneTeamHandler={addOneTeamHandler} selectedTeamsArr={selectedTeamsArr} teamFLag={teamFLag} getTeamFlag={getTeamFlag} deSelectedTeamsArr={deSelectedTeamsArr}/>
             </div>
             <div className='w-50 border'>
-              <SelectedBufferTeam selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} searchTerm={searchTerm} handleSearch={handleSearch} deSearchTerm={deSearchTerm} setDeSearchTerm={setDeSearchTerm} />
+              <SelectedBufferTeam selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler}  deSearchTerm={deSearchTerm} setDeSearchTerm={setDeSearchTerm} />
             </div>
           </div>
         </ModalBody>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table } from 'reactstrap';
 
-export default function SelectedBufferTeam({ selectedTeamsArr, restoreHandler, searchTerm, handleSearch, deSearchTerm, setDeSearchTerm }) {
+export default function SelectedBufferTeam({ selectedTeamsArr, restoreHandler,  deSearchTerm, setDeSearchTerm }) {
   const [teams, setTeams] = useState(selectedTeamsArr);
 
   useEffect(() => {
@@ -58,6 +58,7 @@ export default function SelectedBufferTeam({ selectedTeamsArr, restoreHandler, s
                     src={e?.teamImage}
                     alt="not found"
                     width={60}
+                    height={50}
                   />
                 </td>
                 <td className='text-capitalize'>{e.teamName}</td>

@@ -3,9 +3,9 @@ import { Button, Table } from 'reactstrap';
 
 import './BufferTeam.css';
 
-export default function BufferTeam({ getTeam, modal, masterTeam, editTeam, handleRemove, searchTerm, handleSearch, modalHandler }) {
+export default function BufferTeam({ getTeam, modal, masterTeam, editTeam, handleRemove, searchTerm, handleSearch, modalHandler,masterBufferTeamsArr }) {
 
-  console.log('--team', masterTeam)
+  // console.log('--team', masterTeam)
   useEffect(() => {
     getTeam();
   }, [modal]);
@@ -35,7 +35,7 @@ export default function BufferTeam({ getTeam, modal, masterTeam, editTeam, handl
         </thead>
         <tbody>
           {
-            masterTeam.map((e, i) => {
+            masterBufferTeamsArr.map((e, i) => {
               return (
                 <tr key={i}>
                   <td></td>
@@ -44,6 +44,7 @@ export default function BufferTeam({ getTeam, modal, masterTeam, editTeam, handl
                       src={e?.teamImage}
                       alt="not found"
                       width={60}
+                      height={50}
                     />
                   </td>
                   <td className='text-capitalize'>{e.teamName}</td>

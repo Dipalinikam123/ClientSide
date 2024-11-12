@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Table } from "reactstrap";
 
 export default function DeselectedBufferTeam({
-  team,
   getTeam,
-  modal,
   modalHandler,
   searchTerm,
   handleSearch,
@@ -12,7 +10,7 @@ export default function DeselectedBufferTeam({
   selectedTeams,
   selectedTeamHandler,
   addOneTeamHandler,
-  selectedTeamsArr,
+  deSelectedTeamsArr,
   getTeamFlag,
 }) {
   const [index, setIndex] = useState(null);
@@ -24,9 +22,13 @@ export default function DeselectedBufferTeam({
     setIndex(id);
     handleCheckboxChange(id);
   };
+  console.log('------id index',index)
+  console.log('------id selectedTeams',selectedTeams)
+  console.log('------id deSelectedTeamsArr',deSelectedTeamsArr)
+  console.log('------deSelectedTeamsArr?.includes(index)',deSelectedTeamsArr?.includes(index))
 
-  const deselectedTeams = team.filter((e) => !selectedTeamsArr.includes(e.id));
-  console.log('****deselectedTeams****',deselectedTeams)
+  // const deselectedTeams = team.filter((e) => !selectedTeamsArr.includes(e.id));
+  // console.log('****deselectedTeams****',deselectedTeams)
 
   return (
     <>
@@ -61,7 +63,7 @@ export default function DeselectedBufferTeam({
           <tbody>
             {
               // ( teamFLag? deSelectedTeamsArr : team)?.map((e, i) => {
-                deselectedTeams?.map((e, i) => {
+                deSelectedTeamsArr?.map((e, i) => {
                 return (
                   <tr key={i}>
                     <td>
@@ -72,7 +74,7 @@ export default function DeselectedBufferTeam({
                       />
                     </td>
                     <td>
-                      <img src={e?.teamImage} alt="not found" width={60} />
+                      <img src={e?.teamImage} alt="not found" width={60} height={50} />
                     </td>
                     <td className='text-capitalize'>{e.teamName}</td>
                     <td>

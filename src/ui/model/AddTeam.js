@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
-import axios from 'axios';
 
 function AddTeam({ toggle, modal, createTeams, handleNameChange, handleImageChange, handleSubmit, buttonFlag, handleUpdate }) {
 
@@ -26,38 +25,32 @@ function AddTeam({ toggle, modal, createTeams, handleNameChange, handleImageChan
             </FormGroup>
             <FormGroup className='border'>
               <Label for="teamImage">Team Image</Label>
-              {/* File input to change the team image */}
               <Input
                 id="teamImage"
                 name="image"
                 type="file"
-                onChange={handleImageChange} // Handle file selection
+                onChange={handleImageChange}
               />
-
               {createTeams.teamImage && typeof createTeams.teamImage === 'string' && (
                 <div>
                   <img
-                    src={createTeams.teamImage} // Use the URL directly for existing image
+                    src={createTeams.teamImage}
                     alt="Current"
                     className='mt-3'
                     width={70}
                   />
                 </div>
               )}
-
-              {/* If teamImage is a File (new image selected) */}
               {createTeams.teamImage && createTeams.teamImage instanceof File && (
                 <div>
                   <img
-                    src={URL.createObjectURL(createTeams.teamImage)} // Create a local URL for image preview
+                    src={URL.createObjectURL(createTeams.teamImage)}
                     alt="Selected"
                     className='mt-3'
                     width={70}
                   />
                 </div>
               )}
-
-
             </FormGroup>
           </Form>
         </ModalBody>
@@ -70,7 +63,6 @@ function AddTeam({ toggle, modal, createTeams, handleNameChange, handleImageChan
                 Add
               </Button>
           }
-
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>

@@ -10,10 +10,12 @@ export default function ProtectedRoute({ componant }) {
 
 
     if (!data) {
-      toast("You need to Register")
+      toast("You need to Login", {
+        autoClose: 1000,
+      })
       navigate("/unauthorized")
     }
-  },[navigate])
+  }, [navigate])
   return (
     <div className='w-100'>
       {componant}

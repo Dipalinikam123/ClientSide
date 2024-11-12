@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table } from 'reactstrap';
 import ConfigureTeamModel from '../model/ConfigureTeamModel';
-import axios from 'axios';
 
-export default function BufferConfigureTeam({getTeamFlag, team, editTeam, handleRemove, getTeamHandler, modalHandler, modal, handleSearch, searchTerm, handleCheckboxChange, selectedTeams, selectedTeamHandler, selectedTeamsArr, restoreHandler, addOneTeamHandler,configureTeamHandler,getConfigTeamHandler,configureTeam,bufferModal,bufferToggle,deSearchTerm, setDeSearchTerm,setSelectedTeamsArr,teamFLag,setSearchTerm,setTeamFlag}) {
-
+export default function BufferConfigureTeam({getTeamFlag, team, editTeam, handleRemove, getTeamHandler, modalHandler, modal, handleSearch, searchTerm, handleCheckboxChange, selectedTeams, selectedTeamHandler, selectedTeamsArr, restoreHandler, addOneTeamHandler,configureTeamHandler,getConfigTeamHandler,configureTeam,bufferModal,bufferToggle,deSearchTerm, setDeSearchTerm,setSelectedTeamsArr,teamFLag,setSearchTerm,setTeamFlag, deSelectedTeamsArr}) {
 
   useEffect(() => {
-
     getConfigTeamHandler()
   }, [bufferModal])
 
@@ -41,12 +38,12 @@ export default function BufferConfigureTeam({getTeamFlag, team, editTeam, handle
             {configureTeam?.map((challenge) => (
               <React.Fragment key={challenge.id}>
                 <tr className="table-primary">
-                  <td className='fw-bold' colSpan={3}>{challenge.challengeName}</td>
+                  <td className='fw-bold text-capitalize' colSpan={3}>{challenge.challengeName}</td>
                 </tr>
                 {challenge.teams?.map((team, index) => (
                   <tr key={index}>
                     <td></td>
-                    <td>{team.teamName}</td>
+                    <td className='text-capitalize'>{team.teamName}</td>
                     <td>
                       <img width={80} height={80} src={team.teamImage} alt="Team" className="rounded" />
                     </td>
@@ -57,7 +54,7 @@ export default function BufferConfigureTeam({getTeamFlag, team, editTeam, handle
           </tbody>
         </Table>
       </div>
-      <ConfigureTeamModel getTeamFlag={getTeamFlag} modals={bufferModal} modal={modal} toggle={bufferToggle} team={team} editTeam={editTeam} handleRemove={handleRemove} getTeamHandler={getTeamHandler} modalHandler={modalHandler} searchTerm={searchTerm} handleSearch={handleSearch} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler} configureTeamHandler={configureTeamHandler} deSearchTerm={deSearchTerm} setDeSearchTerm={setDeSearchTerm} teamFLag={teamFLag}/>
+      <ConfigureTeamModel getTeamFlag={getTeamFlag} modals={bufferModal} modal={modal} toggle={bufferToggle} team={team} editTeam={editTeam} handleRemove={handleRemove} getTeamHandler={getTeamHandler} modalHandler={modalHandler} searchTerm={searchTerm} handleSearch={handleSearch} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler} configureTeamHandler={configureTeamHandler} deSearchTerm={deSearchTerm} setDeSearchTerm={setDeSearchTerm} teamFLag={teamFLag} deSelectedTeamsArr={deSelectedTeamsArr}/>
 
     </div>
   )
