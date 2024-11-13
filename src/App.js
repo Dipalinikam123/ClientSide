@@ -7,7 +7,7 @@ import BufferTeam from "./ui/pages/BufferTeam";
 import AddTeam from "./ui/model/AddTeam";
 import axios from "axios";
 import SideBar from "./ui/model/SideBar";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BufferConfigureTeam from "./ui/pages/BufferConfigureTeam";
 import AlertModel from "./ui/model/AlertModel";
 import NavBar from "./ui/components/NavBar";
@@ -41,7 +41,6 @@ function App() {
   const [deSearchTerm, setDeSearchTerm] = useState("");
   const [selectedTeams, setSelectedTeams] = useState([]);
   const [selectedTeamsArr, setSelectedTeamsArr] = useState([]);
-  const [selectedTeamsArr2, setSelectedTeamsArr2] = useState([]);
   const [configureTeam, setConfigureTeam] = useState([]);
   const [bufferModal, setBufferModal] = useState(false);
   const bufferToggle = () => setBufferModal(!bufferModal);
@@ -86,17 +85,8 @@ function App() {
     setPasswordError(loginForm?.password?.length < 6);
   };
   const deSelectedTeamsArr = team.filter((e) => e.teamName.toLowerCase().includes(searchTerm.toLowerCase()))
+  const selectedTeamsArrs = selectedTeamsArr.filter((e) => e.teamName.toLowerCase().includes(deSearchTerm.toLowerCase()))
   const masterBufferTeamsArr = masterTeam.filter((e) => e.teamName.toLowerCase().includes(searchTerm.toLowerCase()))
-  useEffect(() => {
-    const searchResults = selectedTeamsArr2?.filter((e) =>
-      e.teamName.toLowerCase().includes(deSearchTerm.toLowerCase())
-    );
-    if (deSearchTerm === "") {
-      setSelectedTeamsArr(selectedTeamsArr2);
-    } else {
-      setSelectedTeamsArr(searchResults);
-    }
-  }, [deSearchTerm]);
 
   async function getTeamHandler() {
     try {
@@ -261,7 +251,6 @@ function App() {
 
     setTeam(notSelected);
     setSelectedTeamsArr([...selectedTeamsArr, ...selected]);
-    setSelectedTeamsArr2([...selectedTeamsArr, ...selected]);
     setSelectedTeams([]);
   };
 
@@ -291,7 +280,6 @@ function App() {
     });
     setTeam(notSelected);
     setSelectedTeamsArr([...selectedTeamsArr, ...selected]);
-    setSelectedTeamsArr2([...selectedTeamsArr, ...selected]);
   };
 
   const configureTeamHandler = async () => {
@@ -437,7 +425,7 @@ function App() {
               path="/configuration-buffer-team"
               element={<ProtectedRoute componant={<BufferConfigureTeam
                 team={team} editTeam={editTeamHandler} handleRemove={handleRemove} getTeamHandler={getTeamHandler} modalHandler={modalHandler} modal={modal} handleSearch={handleSearch} searchTerm={searchTerm}
-                handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler}
+                handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArrs} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler}
                 setSelectedTeamsArr={setSelectedTeamsArr} configureTeamHandler={configureTeamHandler} getConfigTeamHandler={getConfigTeamHandler} configureTeam={configureTeam} bufferToggle={bufferToggle} bufferModal={bufferModal} deSearchTerm={deSearchTerm}
                 setDeSearchTerm={setDeSearchTerm} teamFLag={teamFLag} setSearchTerm={setSearchTerm} setTeamFlag={setTeamFlag} getTeamFlag={getTeamFlag} deSelectedTeamsArr={deSelectedTeamsArr}
 
