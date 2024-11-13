@@ -1,74 +1,78 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
+import React from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Box, Typography, IconButton } from '@mui/material';
+// import { Close as CloseIcon } from '@mui/icons-material';
 
 function AddTeam({ toggle, modal, createTeams, handleNameChange, handleImageChange, handleSubmit, buttonFlag, handleUpdate }) {
-
   return (
-    <div>
-      <Modal isOpen={modal} toggle={toggle}>
-        {
-          buttonFlag ? <ModalHeader toggle={toggle}>Update Team</ModalHeader> : <ModalHeader toggle={toggle}>Create Team</ModalHeader>
-        }
+    <Dialog open={modal} onClose={toggle} maxWidth="sm" fullWidth>
+      <DialogTitle>
+        {buttonFlag ? 'Update Team' : 'Create Team'}
+        <IconButton
+          aria-label="close"
+          onClick={toggle}
+          sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
+        >
+          {/* <CloseIcon /> */}
+        </IconButton>
+      </DialogTitle>
 
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="teamName">Team Name</Label>
-              <Input
-                id="teamName"
-                name="name"
-                placeholder="Enter Team Name"
-                type="text"
-                value={createTeams.teamName}
-                onChange={handleNameChange}
-              />
-            </FormGroup>
-            <FormGroup className='border'>
-              <Label for="teamImage">Team Image</Label>
-              <Input
-                id="teamImage"
-                name="image"
+      <DialogContent dividers>
+        <Box component="form">
+          <TextField
+            id="teamName"
+            label="Team Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={createTeams.teamName}
+            onChange={handleNameChange}
+            size='small'
+          />
+          <Box mt={2} mb={2}>
+            <Typography variant="body1">Team Image</Typography>
+            <Button
+              variant="contained"
+              component="label"
+              sx={{ mt: 1 }}
+            >
+              Upload Image
+              <input
                 type="file"
+                hidden
                 onChange={handleImageChange}
               />
-              {createTeams.teamImage && typeof createTeams.teamImage === 'string' && (
-                <div>
-                  <img
-                    src={createTeams.teamImage}
-                    alt="Current"
-                    className='mt-3'
-                    width={70}
-                  />
-                </div>
-              )}
-              {createTeams.teamImage && createTeams.teamImage instanceof File && (
-                <div>
-                  <img
-                    src={URL.createObjectURL(createTeams.teamImage)}
-                    alt="Selected"
-                    className='mt-3'
-                    width={70}
-                  />
-                </div>
-              )}
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          {
-            buttonFlag ? <Button color="primary" onClick={handleUpdate}>
-              Update
-            </Button> :
-              <Button color="primary" onClick={handleSubmit}>
-                Add
-              </Button>
-          }
-          <Button color="secondary" onClick={toggle}>
-            Cancel
+            </Button>
+            {createTeams.teamImage && (
+              <Box mt={2}>
+                <img
+                  src={createTeams.teamImage instanceof File
+                    ? URL.createObjectURL(createTeams.teamImage)
+                    : createTeams.teamImage}
+                  alt="Team"
+                  width={70}
+                  style={{ marginTop: '10px', borderRadius: '4px' }}
+                />
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </DialogContent>
+
+      <DialogActions>
+        {buttonFlag ? (
+          <Button variant="contained" color="primary" onClick={handleUpdate}>
+            Update
           </Button>
-        </ModalFooter>
-      </Modal>
-    </div>
+        ) : (
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Add
+          </Button>
+        )}
+        <Button variant="outlined" onClick={toggle} color="secondary">
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 

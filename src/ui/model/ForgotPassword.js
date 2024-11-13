@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 
-function ForgotPassword({ toggle, modal }) {
+function ForgotPassword({ toggle, modal,setPwdModal,forgetPassword }) {
+
+  const [email,setEmail]=useState('')
+
+  const forgotPwd=()=>{
+    setPwdModal(false)
+    forgetPassword(email)
+  }
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle} >
         <ModalHeader toggle={toggle}>Modal title</ModalHeader>
         <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          <Input
+            type="email"
+            placeholder="Enter your email"
+          value={email} 
+          onChange={(e)=>setEmail(e?.target?.value)} 
+          />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>
-            Do Something
+          <Button color="primary" onClick={forgotPwd}>
+            Send link
           </Button>{' '}
-          <Button color="secondary" onClick={toggle}>
+          <Button color="secondary" onClick={()=>setPwdModal(false)}>
             Cancel
           </Button>
         </ModalFooter>

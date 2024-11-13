@@ -7,7 +7,7 @@ import BufferTeam from "./ui/pages/BufferTeam";
 import AddTeam from "./ui/model/AddTeam";
 import axios from "axios";
 import SideBar from "./ui/model/SideBar";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import BufferConfigureTeam from "./ui/pages/BufferConfigureTeam";
 import AlertModel from "./ui/model/AlertModel";
 import NavBar from "./ui/components/NavBar";
@@ -15,6 +15,7 @@ import Home from "./ui/pages/Home";
 import Unauthorized from "./ui/Unauthorized";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import Profile from "./ui/pages/Profile";
+import ResetPassword from "./ui/pages/ResetPassword";
 
 
 const formFields = {
@@ -30,7 +31,6 @@ function App() {
   const toggle = () => setModal(!modal);
   const [team, setTeam] = useState([]);
   const [masterTeam, setMasterTeam] = useState([]);
-  // const [filteredTeam, setFilteredTeam] = useState([]);
   const [createTeams, setCreateTeams] = useState({
     teamName: "",
     teamImage: null,
@@ -41,7 +41,6 @@ function App() {
   const [deSearchTerm, setDeSearchTerm] = useState("");
   const [selectedTeams, setSelectedTeams] = useState([]);
   const [selectedTeamsArr, setSelectedTeamsArr] = useState([]);
-  // const [deSelectedTeamsArr, setDeSelectedTeamsArr] = useState([]);
   const [selectedTeamsArr2, setSelectedTeamsArr2] = useState([]);
   const [configureTeam, setConfigureTeam] = useState([]);
   const [bufferModal, setBufferModal] = useState(false);
@@ -66,14 +65,13 @@ function App() {
     password: ''
   })
   const [token, setToken] = useState('')
-
-
   const [errors, setErrors] = useState({
     nameError: false,
     emailError: false,
     passwordError: false,
   });
 
+  // const navigate=useNavigate()
   const regValidateForm = () => {
     const nameError = registerForm?.firstName.trim() === '' || registerForm?.lastName.trim() === '';
     const emailError = !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(registerForm?.email);
@@ -87,7 +85,6 @@ function App() {
     setEmailError(!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(loginForm?.email));
     setPasswordError(loginForm?.password?.length < 6);
   };
-
   const deSelectedTeamsArr = team.filter((e) => e.teamName.toLowerCase().includes(searchTerm.toLowerCase()))
   const masterBufferTeamsArr = masterTeam.filter((e) => e.teamName.toLowerCase().includes(searchTerm.toLowerCase()))
   useEffect(() => {
@@ -247,9 +244,6 @@ function App() {
       setSelectedTeams([...selectedTeams, teamId]);
     }
   };
-
-  // console.log("------selectedTeams", selectedTeams);
-
   const selectedTeamHandler = () => {
     setTeamFlag(true);
     console.log("-------team", team);
@@ -270,10 +264,6 @@ function App() {
     setSelectedTeamsArr2([...selectedTeamsArr, ...selected]);
     setSelectedTeams([]);
   };
-
-  // console.log("******-------deSelectedTeamsArr", deSelectedTeamsArr);
-  // console.log("******-------deSelectedTeamsArr", deSelectedTeamsArr);
-  // console.log("-------selectedTeamsArr after selection", selectedTeamsArr);
 
   const restoreHandler = (index) => {
     const selected = [];
@@ -303,7 +293,6 @@ function App() {
     setSelectedTeamsArr([...selectedTeamsArr, ...selected]);
     setSelectedTeamsArr2([...selectedTeamsArr, ...selected]);
   };
-  // console.log("---setSelectedTeamsArr 11--", selectedTeamsArr);
 
   const configureTeamHandler = async () => {
     const challengeName = prompt("Enter Challenge Name..");
@@ -342,10 +331,10 @@ function App() {
 
   async function getUserProfile() {
     try {
-      const token =JSON.parse(localStorage.getItem("token")); 
+      const token = JSON.parse(localStorage.getItem("token"));
       const response = await axios.get(`http://localhost:1337/userProfile`, {
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
       console.log("Response:", response.data);
@@ -366,7 +355,6 @@ function App() {
       console.error("Error fetching team:", error);
     }
   }
-  // console.log("-----teamFLag", teamFLag);
   async function registerUserHandler() {
     regValidateForm()
     try {
@@ -405,6 +393,7 @@ function App() {
         email: '',
         password: ''
       });
+      
       localStorage.setItem('token', JSON.stringify(response.data.user.token))
       toast("User Login Succesfully", {
         autoClose: 1000,
@@ -413,15 +402,32 @@ function App() {
       toast(error?.response?.data?.message, {
         autoClose: 1000,
       });
-      console.error("Error login user:", error);
     }
   }
+  async function forgetPassword(email) {
+    try {
+      const response = await axios.post(
+        "http://localhost:1337/resetPassword",
+        { email: email },
+      );
+      console.log("Response login:", response.data);
+      toast("Link Send Succesfully", {
+        autoClose: 1000,
+      });
+    } catch (error) {
+      toast(error?.response?.data?.message, {
+        autoClose: 1000,
+      });
+    }
+  }
+
 
 
   return (
     <div>
       <BrowserRouter>
-        <NavBar logModal={logModal} logToggle={logToggle} regModal={regModal} regToggle={regToggle} setRegisterForm={setRegisterForm} registerForm={registerForm} loginForm={loginForm} setLoginForm={setLoginForm} token={token} setToken={setToken} registerUserHandler={registerUserHandler} loginUserHandler={loginUserHandler} errors={errors} setErrors={setErrors} setPasswordError={setPasswordError} setEmailError={setEmailError} passwordError={passwordError} emailError={emailError} />
+        <NavBar logModal={logModal} logToggle={logToggle} regModal={regModal} regToggle={regToggle} setRegisterForm={setRegisterForm} registerForm={registerForm} loginForm={loginForm} setLoginForm={setLoginForm} token={token} setToken={setToken}
+          registerUserHandler={registerUserHandler} loginUserHandler={loginUserHandler} errors={errors} setErrors={setErrors} setPasswordError={setPasswordError} setEmailError={setEmailError} passwordError={passwordError} emailError={emailError} forgetPassword={forgetPassword} />
         <div className="d-flex align-items-start">
 
           {token ? <SideBar /> : <Routes><Route path="/" element={<Home />} /></Routes>}
@@ -446,6 +452,7 @@ function App() {
               />} />
               }
             />
+            <Route path='/resetPassword/:id/:token' element={<ResetPassword logToggle={logToggle}/>} />
             <Route path="/profile" element={<ProtectedRoute componant={<Profile getUserProfile={getUserProfile} userProfile={userProfile} />} />} />
             <Route path='/unauthorized' element={<Unauthorized logModal={logModal} regModal={regModal} />} />
           </Routes>

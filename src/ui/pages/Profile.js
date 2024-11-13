@@ -1,60 +1,49 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
+import { Card, CardContent, CardHeader, Typography, Grid, Container } from '@mui/material';
 
 export default function Profile({ getUserProfile, userProfile }) {
   useEffect(() => {
-    getUserProfile()
-  }, []);
-
-  console.log('------userProfile', userProfile)
-
+    getUserProfile();
+  }, [getUserProfile]);
 
   return (
-    <div className="container mt-5 ">
-        {/* Profile Details */}
-        <div className="col-md-4 mx-auto">
-          <div className="card shadow-sm">
-            <div className="card-header">
-              <h5>Profile Details</h5>
-            </div>
-            <div className="card-body">
-              <div className="row mb-3">
-                <div className="col-sm-3">
-                  <strong>Name:</strong>
-                </div>
-                <div className="col-sm-9">{userProfile?.user?.firstName} {userProfile?.user?.lastName}</div>
-              </div>
-              <div className="row mb-3">
-                <div className="col-sm-3">
-                  <strong>Email:</strong>
-                </div>
-                <div className="col-sm-9">{userProfile?.user?.email}</div>
-              </div>
-              <div className="row mb-3">
-                <div className="col-sm-3">
-                  <strong>Gender:</strong>
-                </div>
-                <div className="col-sm-9">{userProfile?.user?.gender}</div>
-              </div>
-              {/* <div className="row mb-3">
-                <div className="col-sm-3">
-                  <strong>Address:</strong>
-                </div>
-                <div className="col-sm-9">1234 Elm St, San Francisco, CA</div>
-              </div>
-              <div className="row mb-3">
-                <div className="col-sm-3">
-                  <strong>About Me:</strong>
-                </div>
-                <div className="col-sm-9">
-                  A passionate developer with experience in creating dynamic and user-friendly web applications.
-                </div>
-              </div> */}
-            </div>
-          </div>
-        </div>
-      
-    </div>
+    <Container sx={{ mt: 5 }}>
+      {/* Profile Details */}
+      <Grid container justifyContent="center">
+        <Grid item xs={12} sm={8} md={6}>
+          <Card elevation={3}>
+            <CardHeader title="Profile Details" />
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <Typography variant="subtitle1" fontWeight="bold">Name:</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography variant="body1">
+                    {userProfile?.user?.firstName} {userProfile?.user?.lastName}
+                  </Typography>
+                </Grid>
+                
+                <Grid item xs={4}>
+                  <Typography variant="subtitle1" fontWeight="bold">Email:</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography variant="body1">{userProfile?.user?.email}</Typography>
+                </Grid>
+                
+                <Grid item xs={4}>
+                  <Typography variant="subtitle1" fontWeight="bold">Gender:</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography variant="body1">{userProfile?.user?.gender}</Typography>
+                </Grid>
+
+                {/* Additional fields can be added here as needed */}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
   );
-};
-
-
+}

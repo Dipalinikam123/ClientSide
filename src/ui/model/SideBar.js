@@ -1,29 +1,56 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavLink } from "react-router-dom";
+import { Box, Typography, Divider, List, ListItem } from '@mui/material';
 
 export default function SideBar() {
- 
   return (
-    <div style={{
-      width: '250px',
-      minHeight: '100vh',
-      backgroundColor: '#282c34',
-      padding: '1rem',
-      boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
-      color: 'white'
-    }}>
-      <h5 style={{ marginBottom: '1.5rem' }}>Sidebar</h5>
-      <hr />
+    <Box
+      sx={{
+        width: 250,
+        minHeight: '100vh',
+        backgroundColor: '#282c34',
+        color: 'white',
+        padding: 2,
+        boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
+      }}
+    >
+      <Typography variant="h5" sx={{ marginBottom: 3 }}>
+        Sidebar
+      </Typography>
+      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.2)' }} />
 
-      <nav className='d-flex flex-column gap-3 mt-5'>
-        <NavLink active to="/configuration-buffer-team" className='text-light text-decoration-none border border-top-0 border-start-0 border-end-0 pb-2'>
-          Configure Buffer Team
-        </NavLink>
-        <NavLink to="/master-buffer-team" className='text-light text-decoration-none border border-top-0 border-start-0 border-end-0 pb-2' >
-          Master Buffer Team
-        </NavLink>
-
-      </nav>
-    </div>
+      <List sx={{ mt: 4 }}>
+        <ListItem disablePadding>
+          <NavLink
+            to="/configuration-buffer-team"
+            style={({ isActive }) => ({
+              color: isActive ? '#61dafb' : 'white',
+              textDecoration: 'none',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+              paddingBottom: 8,
+              display: 'block',
+              width: '100%',
+            })}
+          >
+            Configure Buffer Team
+          </NavLink>
+        </ListItem>
+        <ListItem disablePadding sx={{ mt: 1 }}>
+          <NavLink
+            to="/master-buffer-team"
+            style={({ isActive }) => ({
+              color: isActive ? '#61dafb' : 'white',
+              textDecoration: 'none',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+              paddingBottom: 8,
+              display: 'block',
+              width: '100%',
+            })}
+          >
+            Master Buffer Team
+          </NavLink>
+        </ListItem>
+      </List>
+    </Box>
   );
 }

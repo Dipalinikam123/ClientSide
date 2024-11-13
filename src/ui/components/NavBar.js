@@ -1,30 +1,16 @@
 import { useEffect, useState } from "react";
-import { Collapse, Navbar, NavbarBrand, Nav, Button } from "reactstrap";
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import LoginModel from "../model/LoginModel";
 import RegisterModel from "../model/RegisterModel";
 import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 
-export default function NavBar({
-  logModal,
-  logToggle,
-  regModal,
-  regToggle,
-  registerForm,
-  setRegisterForm,
-  setLoginForm,
-  loginForm,
-  setToken,
-  token,
-  registerUserHandler,
-  loginUserHandler,
-  errors,
-  setErrors,
-  setPasswordError,
-  setEmailError,
-  passwordError,
-  emailError,
-}) {
+export default function NavBar({ logModal, logToggle, regModal, regToggle, registerForm, setRegisterForm, setLoginForm, loginForm, setToken, token, registerUserHandler, loginUserHandler, errors,
+  setErrors, setPasswordError, setEmailError, passwordError, emailError, forgetPassword }) {
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -61,6 +47,7 @@ export default function NavBar({
         setErrors={setErrors}
         passwordError={passwordError}
         emailError={emailError}
+        forgetPassword={forgetPassword}
       />
       <RegisterModel
         modal={regModal}
@@ -71,24 +58,27 @@ export default function NavBar({
         registerUserHandler={registerUserHandler}
         errors={errors}
       />
-      <Navbar expand="lg">
-        <NavbarBrand href="/">Teams</NavbarBrand>
-        <Collapse navbar>
-          <Nav className="me-auto" navbar></Nav>
-          {token ? (
-            <div className="d-flex align-items-center justify-content-center gap-3">
-              <CgProfile size={26} role="button" onClick={()=>navigate('/profile')}/>
-              <Button className="bg-danger border-danger" onClick={logOutHandler}>
-                LogOut
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" sx={{ bgcolor: 'background.paper',color: 'text.primary' }}>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              News
+            </Typography>
+            {token ? (
+              <div className="d-flex align-items-center justify-content-center gap-3">
+                <CgProfile size={26} role="button" onClick={() => navigate('/profile')} />
+                <Button variant="contained" color="error" onClick={logOutHandler}>
+                  LogOut
+                </Button>
+              </div>
+            ) : (
+              <Button variant="contained" color="error" onClick={loginHandler}>
+                Login
               </Button>
-            </div>
-          ) : (
-            <Button className="bg-danger border-danger" onClick={loginHandler}>
-              Login
-            </Button>
-          )}
-        </Collapse>
-      </Navbar>
+            )}
+          </Toolbar>
+        </AppBar>
+      </Box>
     </div>
   );
 }

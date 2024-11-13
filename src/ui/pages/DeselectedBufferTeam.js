@@ -1,5 +1,6 @@
+import { Button, Paper, TableBody, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Button, Table } from "reactstrap";
+import { Table } from "reactstrap";
 
 export default function DeselectedBufferTeam({
   getTeam,
@@ -22,10 +23,10 @@ export default function DeselectedBufferTeam({
     setIndex(id);
     handleCheckboxChange(id);
   };
-  console.log('------id index',index)
-  console.log('------id selectedTeams',selectedTeams)
-  console.log('------id deSelectedTeamsArr',deSelectedTeamsArr)
-  console.log('------deSelectedTeamsArr?.includes(index)',deSelectedTeamsArr?.includes(index))
+  console.log('------id index', index)
+  console.log('------id selectedTeams', selectedTeams)
+  console.log('------id deSelectedTeamsArr', deSelectedTeamsArr)
+  console.log('------deSelectedTeamsArr?.includes(index)', deSelectedTeamsArr?.includes(index))
 
   // const deselectedTeams = team.filter((e) => !selectedTeamsArr.includes(e.id));
   // console.log('****deselectedTeams****',deselectedTeams)
@@ -33,70 +34,70 @@ export default function DeselectedBufferTeam({
   return (
     <>
       <div className="pb-2 d-flex justify-content-between border border-top-0 border-start-0 border-end-0 py-3 px-2">
-        <input
+        <TextField
           type="search"
-          placeholder="Search here..."
-          className="rounded px-2 border-1 "
+          id="outlined-basic"
+          label='Search here...'
+          variant="outlined"
+          size="small"
+          // className="rounded px-2 border-1 "
           value={searchTerm}
           onChange={handleSearch}
         />
         {selectedTeams?.includes(index) && (
-          <button
-            className="bg-success rounded border-0 text-light"
+          <Button variant="contained" color="success" size="small"
             onClick={selectedTeamHandler}
           >
             Add Selected Team {selectedTeams?.length}{" "}
-          </button>
+          </Button>
         )}
-        <button
+        <Button variant="contained" size="small" color="success"
           onClick={() => modalHandler()}
-          className="bg-success rounded border-0 text-light"
         >
           Create Team
-        </button>
+        </Button>
       </div>
       <div>
         <p className="fw-bold p-2 border border-top-0 border-start-0 border-end-0">
           Master Buffer Team
         </p>
-        <Table className="">
-          <tbody>
-            {
-              // ( teamFLag? deSelectedTeamsArr : team)?.map((e, i) => {
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableBody>
+              {
                 deSelectedTeamsArr?.map((e, i) => {
-                return (
-                  <tr key={i}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedTeams?.includes(e?.id)}
-                        onChange={() => handleCheckboxChange1(e?.id)}
-                      />
-                    </td>
-                    <td>
-                      <img src={e?.teamImage} alt="not found" width={60} height={50} />
-                    </td>
-                    <td className='text-capitalize'>{e.teamName}</td>
-                    <td>
-                      {!selectedTeams?.includes(e?.id) && (
-                        <Button
-                          color="primary"
-                          className="me-2"
-                          onClick={() => addOneTeamHandler(e.id)}
-                        >
-                          Add
-                        </Button>
-                      )}
-                    </td>
-                    {/* <td>
-                    <Button color="danger" onClick={() => handleRemove(e.id)}>Remove</Button>
-                  </td> */}
-                  </tr>
-                );
-              })
-            }
-          </tbody>
-        </Table>
+                  return (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <input
+                          type="checkbox"
+                          checked={selectedTeams?.includes(e?.id)}
+                          onChange={() => handleCheckboxChange1(e?.id)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <img src={e?.teamImage} alt="not found" width={60} height={50} />
+                      </TableCell>
+                      <TableCell className='text-capitalize'>{e.teamName}</TableCell>
+                      <TableCell>
+                        {!selectedTeams?.includes(e?.id) && (
+                          <Button variant="contained"
+                            color="primary"
+                            // className="me-2"
+                            size="small"
+                            onClick={() => addOneTeamHandler(e.id)}
+                          >
+                            Add
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              }
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </>
   );

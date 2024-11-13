@@ -13,30 +13,25 @@ import {
 } from "reactstrap";
 import ForgotPassword from "./ForgotPassword";
 
-function LoginModel({
-  modal,
-  toggle,
-  regToggle,
-  setLoginForm,
-  loginForm,
-  loginUserHandler,
-  setErrors,
-  passwordError,
-  emailError,
-}) {
+function LoginModel({ modal, toggle, regToggle, setLoginForm, loginForm, loginUserHandler, setErrors, passwordError, emailError,forgetPassword }) {
 
   const [pwdModal, setPwdModal] = useState(false);
 
-  const pwdToggle = () => setPwdModal(!pwdModal);
+  const pwdToggle = () => {
+    toggle()
+    setPwdModal(!pwdModal);
+  }
 
   const registerHandler = () => {
     setErrors({ nameError: false, emailError: false, passwordError: false });
     toggle();
     regToggle();
   };
+
+  
   return (
     <div>
-      <ForgotPassword toggle={pwdToggle} modal={pwdModal}/>
+      <ForgotPassword toggle={pwdToggle} modal={pwdModal} setPwdModal={setPwdModal} forgetPassword={forgetPassword}/>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Login Form</ModalHeader>
         <ModalBody>

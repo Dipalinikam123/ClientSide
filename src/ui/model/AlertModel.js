@@ -1,39 +1,43 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import React from 'react';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 
 export default function AlertModel({ alertModal, alertToggle, handleRemoveTeam }) {
 
   return (
-    <div>
-      <Modal 
-        isOpen={alertModal} 
-        toggle={alertToggle} 
-      >
-        <ModalHeader toggle={alertToggle} className="bg-danger text-white">
-          <strong>Remove Team</strong>
-        </ModalHeader>
-        
-        <ModalBody className="text-center">
-          <p className="fs-5">Are you sure you want to remove this team?</p>
-        </ModalBody>
-        
-        <ModalFooter className="d-flex justify-content-between">
-          <Button 
-            color="danger" 
-            onClick={() => handleRemoveTeam()} 
-            className="px-4"
-          >
-            Remove
-          </Button>
-          <Button 
-            color="secondary" 
-            onClick={alertToggle} 
-            className="px-4"
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-    </div>
+    <Dialog 
+      open={alertModal} 
+      onClose={alertToggle}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title" sx={{ bgcolor: 'error.main', color: 'white' }}>
+        <strong>Remove Team</strong>
+      </DialogTitle>
+      
+      <DialogContent dividers>
+        <Typography variant="body1" align="center" sx={{ fontSize: '1.1rem' }}>
+          Are you sure you want to remove this team?
+        </Typography>
+      </DialogContent>
+      
+      <DialogActions sx={{ justifyContent: 'space-between', px: 3 }}>
+        <Button 
+          variant="contained" 
+          color="error" 
+          onClick={handleRemoveTeam}
+          sx={{ px: 4 }}
+        >
+          Remove
+        </Button>
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={alertToggle}
+          sx={{ px: 4 }}
+        >
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
