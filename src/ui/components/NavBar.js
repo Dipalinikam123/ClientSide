@@ -65,12 +65,12 @@ export default function NavBar({ logModal, logToggle, regModal, regToggle, regis
               News
             </Typography>
             {token ? (
-              <div className="d-flex align-items-center justify-content-center gap-3">
+              <Box sx={{display:'flex', alignItems:'center', justifyContent:'center', gap:'15px'}}>
                 <CgProfile size={26} role="button" onClick={() => navigate('/profile')} />
                 <Button variant="contained" color="error" onClick={logOutHandler}>
                   LogOut
                 </Button>
-              </div>
+              </Box>
             ) : (
               <Button variant="contained" color="error" onClick={loginHandler}>
                 Login

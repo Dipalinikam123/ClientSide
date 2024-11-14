@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 export default function BufferConfigureTeam({ getTeamFlag, team, editTeam, handleRemove, getTeamHandler, modalHandler, modal, handleSearch, searchTerm, handleCheckboxChange, selectedTeams, selectedTeamHandler, selectedTeamsArr, restoreHandler, addOneTeamHandler, configureTeamHandler, getConfigTeamHandler, configureTeam, bufferModal, bufferToggle, deSearchTerm, setDeSearchTerm, setSelectedTeamsArr, teamFLag, setSearchTerm, setTeamFlag, deSelectedTeamsArr }) {
 
@@ -26,11 +26,16 @@ export default function BufferConfigureTeam({ getTeamFlag, team, editTeam, handl
 
   console.log('-----get configureTeam', configureTeam)
   return (
-    <div className='container p-5'>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+    <Box sx={{ padding: "40px 70px" }}>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 3,
+      }}>
         <h2>Configuration Buffer Teams</h2>
         <Button variant="contained" className='bg-success' onClick={configureTeamModel}>Add Buffer Team</Button>
-      </div>
+      </Box>
 
       <div style={{ maxHeight: '80vh', overflowY: 'auto' }}>
         <TableContainer component={Paper}>
@@ -64,6 +69,6 @@ export default function BufferConfigureTeam({ getTeamFlag, team, editTeam, handl
         </TableContainer>
       </div>
       <ConfigureTeamModel getTeamFlag={getTeamFlag} modals={bufferModal} modal={modal} toggle={bufferToggle} team={team} editTeam={editTeam} handleRemove={handleRemove} getTeamHandler={getTeamHandler} modalHandler={modalHandler} searchTerm={searchTerm} handleSearch={handleSearch} handleCheckboxChange={handleCheckboxChange} selectedTeams={selectedTeams} selectedTeamHandler={selectedTeamHandler} selectedTeamsArr={selectedTeamsArr} restoreHandler={restoreHandler} addOneTeamHandler={addOneTeamHandler} configureTeamHandler={configureTeamHandler} deSearchTerm={deSearchTerm} setDeSearchTerm={setDeSearchTerm} teamFLag={teamFLag} deSelectedTeamsArr={deSelectedTeamsArr} />
-    </div>
+    </Box>
   )
 }

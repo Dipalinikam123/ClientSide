@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { Box, TextField } from '@mui/material';
 
-export default function ResetPassword({logToggle}) {
+export default function ResetPassword({ logToggle }) {
   const { id, token } = useParams();
   const [resetPwd, setResetPwd] = useState({
     password: '',
@@ -39,7 +39,9 @@ export default function ResetPassword({logToggle}) {
     const { password, confirmPassword } = resetPwd;
     console.log('----password,confirmPassword', password, confirmPassword)
     if (password !== confirmPassword) {
-      return alert("Passwords do not match");
+      return toast("Passwords do not match", {
+        autoClose: 1000,
+      });
     }
     try {
       const response = await axios.post(`http://localhost:1337/verify-reset-token/${id}/${token}`, { password, confirmPassword });

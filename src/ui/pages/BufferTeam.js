@@ -36,10 +36,10 @@ export default function BufferTeam({ getTeam, modal, editTeam, handleRemove, sea
               </TableCell>
               <TableCell></TableCell>
               <TableCell>
-                <Typography fontWeight="bold">Edit</Typography>
+                <Typography fontWeight="bold">Action</Typography>
               </TableCell>
               <TableCell>
-                <Typography fontWeight="bold">Remove</Typography>
+                <Typography fontWeight="bold">Action</Typography>
               </TableCell>
             </TableRow>
           </TableHead>

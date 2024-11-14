@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Box, Typography, IconButton } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Box, Typography } from '@mui/material';
 // import { Close as CloseIcon } from '@mui/icons-material';
 
 function AddTeam({ toggle, modal, createTeams, handleNameChange, handleImageChange, handleSubmit, buttonFlag, handleUpdate }) {
@@ -7,13 +7,6 @@ function AddTeam({ toggle, modal, createTeams, handleNameChange, handleImageChan
     <Dialog open={modal} onClose={toggle} maxWidth="sm" fullWidth>
       <DialogTitle>
         {buttonFlag ? 'Update Team' : 'Create Team'}
-        <IconButton
-          aria-label="close"
-          onClick={toggle}
-          sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
-        >
-          {/* <CloseIcon /> */}
-        </IconButton>
       </DialogTitle>
 
       <DialogContent dividers>

@@ -1,107 +1,131 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormFeedback, FormText } from 'reactstrap';
+import React from 'react';
+import {
+  Button,
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  FormHelperText,
+} from '@mui/material';
 
-
-
-function RegisterModel({ modal, toggle, logToggle, setRegisterForm, registerForm, registerUserHandler ,errors}) {
-  
+function RegisterModel({
+  modal,
+  toggle,
+  logToggle,
+  setRegisterForm,
+  registerForm,
+  registerUserHandler,
+  errors,
+}) {
 
   const loginHandler = () => {
-    toggle()
-    logToggle()
-  }
+    toggle();
+    logToggle();
+  };
+
   return (
     <div>
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Register</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="firstname">FirstName</Label>
-              <Input
-                type="text"
-                id="firstname"
-                placeholder="Enter Your FirstName"
-                value={registerForm?.firstName}
-                onChange={(e) => setRegisterForm({ ...registerForm, firstName: e.target.value })}
-                invalid={errors?.nameError}
-              />
-              <FormFeedback>Name is required.</FormFeedback>
-            </FormGroup>
-            <FormGroup>
-              <Label for="lastname">LastName</Label>
-              <Input
-                type="text"
-                id="lastname"
-                placeholder="Enter Your LastName"
-                value={registerForm?.lastName}
-                onChange={(e) => setRegisterForm({ ...registerForm, lastName: e.target.value })}
-                invalid={errors?.nameError}
-              />
-              <FormFeedback>Name is required.</FormFeedback>
-            </FormGroup>
-            <FormGroup>
-              <Label for="email">Email</Label>
-              <Input
-                type="email"
-                id="email"
-                placeholder="Enter Your Email"
-                value={registerForm?.email}
-                onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-                invalid={errors?.emailError}
-              />
-              <FormFeedback>Email is invalid.</FormFeedback>
-            </FormGroup>
-            <FormGroup>
-              <Label for="password">Password</Label>
-              <Input
-                type="password"
-                id="password"
-                placeholder="Enter Your Password"
-                value={registerForm?.password}
-                onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                invalid={errors?.passwordError}
-              />
-              <FormFeedback>Password must be at least 6 characters.</FormFeedback>
-            </FormGroup>
-            <FormGroup tag="fieldset">
-              <Label>Gender</Label>
-              <FormGroup check>
-                <Label check>
-                  <Input
-                    type="radio"
-                    name="gender"
-                    value="Male"
-                    onChange={(e) => setRegisterForm({ ...registerForm, gender: e.target.value })}
-                    checked={registerForm?.gender === 'Male'}
-                  />{' '}
-                  Male
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input
-                    type="radio"
-                    name="gender"
-                    value="Female"
-                    onChange={(e) => setRegisterForm({ ...registerForm, gender: e.target.value })}
-                    checked={registerForm?.gender === 'Female'}
-                  />{' '}
-                  Female
-                </Label>
-              </FormGroup>
-            </FormGroup>
-          </Form>
-          <p>Already Have Account..? <span className='text-primary' role='button' onClick={loginHandler}>Login</span></p>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={registerUserHandler}>
+      <Modal open={modal} onClose={toggle}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            p: 4,
+            borderRadius: 2,
+            boxShadow: 24,
+          }}
+        >
+          <Typography variant="h6" component="h2" gutterBottom>
             Register
-          </Button>
-          <Button color="secondary" onClick={toggle}>
-            Cancel
-          </Button>
-        </ModalFooter>
+          </Typography>
+
+          <TextField
+            label="First Name"
+            type="text"
+            fullWidth
+            value={registerForm?.firstName}
+            onChange={(e) => setRegisterForm({ ...registerForm, firstName: e.target.value })}
+            error={Boolean(errors?.nameError)}
+            helperText={errors?.nameError && 'Name is required.'}
+            margin="normal"
+          />
+
+          <TextField
+            label="Last Name"
+            type="text"
+            fullWidth
+            value={registerForm?.lastName}
+            onChange={(e) => setRegisterForm({ ...registerForm, lastName: e.target.value })}
+            error={Boolean(errors?.nameError)}
+            helperText={errors?.nameError && 'Name is required.'}
+            margin="normal"
+          />
+
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            value={registerForm?.email}
+            onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
+            error={Boolean(errors?.emailError)}
+            helperText={errors?.emailError && 'Email is invalid.'}
+            margin="normal"
+          />
+
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            value={registerForm?.password}
+            onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
+            error={Boolean(errors?.passwordError)}
+            helperText={errors?.passwordError && 'Password must be at least 6 characters.'}
+            margin="normal"
+          />
+
+          <FormControl component="fieldset" margin="normal">
+            <FormLabel component="legend">Gender</FormLabel>
+            <RadioGroup
+              value={registerForm?.gender}
+              onChange={(e) => setRegisterForm({ ...registerForm, gender: e.target.value })}
+              row
+            >
+              <FormControlLabel value="Male" control={<Radio />} label="Male" />
+              <FormControlLabel value="Female" control={<Radio />} label="Female" />
+            </RadioGroup>
+          </FormControl>
+
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            Already have an account?{" "}
+            <Typography
+              variant="body2"
+              color="primary"
+              component="span"
+              sx={{ cursor: "pointer" }}
+              onClick={loginHandler}
+            >
+              Login
+            </Typography>
+          </Typography>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+            <Button variant="contained" color="primary" onClick={registerUserHandler}>
+              Register
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={toggle} sx={{ ml: 2 }}>
+              Cancel
+            </Button>
+          </Box>
+        </Box>
       </Modal>
     </div>
   );

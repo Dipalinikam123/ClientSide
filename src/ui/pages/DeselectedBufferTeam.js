@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Table } from "reactstrap";
 
 export default function DeselectedBufferTeam({
-  getTeam,
+  getTeamHandler,
   modalHandler,
   searchTerm,
   handleSearch,
@@ -16,7 +16,7 @@ export default function DeselectedBufferTeam({
 }) {
   const [index, setIndex] = useState(null);
   useEffect(() => {
-    getTeam();
+    getTeamHandler();
   }, [getTeamFlag]);
 
   const handleCheckboxChange1 = (id) => {
