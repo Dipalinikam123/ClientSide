@@ -10,7 +10,6 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  FormHelperText,
 } from '@mui/material';
 
 function RegisterModel({
@@ -45,7 +44,7 @@ function RegisterModel({
           }}
         >
           <Typography variant="h6" component="h2" gutterBottom>
-            Register
+            Register Model
           </Typography>
 
           <TextField

@@ -23,7 +23,7 @@ export default function SelectedBufferTeam({ selectedTeamsArr, restoreHandler, d
 
     const updatedTeams = [...teams];
     const draggedTeam = updatedTeams.splice(draggedIndex, 1)[0];
-    console.log('-----draggedTeam', draggedTeam)
+    // console.log('-----draggedTeam', draggedTeam)
     updatedTeams.splice(index, 0, draggedTeam);
 
     setTeams(updatedTeams);

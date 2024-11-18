@@ -59,13 +59,13 @@ export default function NavBar({ logModal, logToggle, regModal, regToggle, regis
         errors={errors}
       />
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ bgcolor: 'background.paper',color: 'text.primary' }}>
+        <AppBar position="static" sx={{ bgcolor: 'background.paper', color: 'text.primary' }}>
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               News
             </Typography>
             {token ? (
-              <Box sx={{display:'flex', alignItems:'center', justifyContent:'center', gap:'15px'}}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
                 <CgProfile size={26} role="button" onClick={() => navigate('/profile')} />
                 <Button variant="contained" color="error" onClick={logOutHandler}>
                   LogOut
